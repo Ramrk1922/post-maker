@@ -545,7 +545,7 @@ function drawPost() {
 
   // Accent bars
   if (showBar) { ctx.fillStyle = ac; ctx.fillRect(0, mH-6*s, w, 6*s); ctx.fillRect(0, 0, w, 5*s); }
-  ctx.fillStyle = ac; ctx.fillRect(28*s + hX, mH*0.32 + hY, 5*s, mH*0.42);
+  ctx.fillStyle = ac; 
 
   // Headline
   const mxW = w * twp - 60*s;
