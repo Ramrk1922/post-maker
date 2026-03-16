@@ -14,7 +14,7 @@ body {
   flex-direction: column;
   overflow: hidden;
 }
-.sidebar { width: 285px; min-width: 285px; background: #ffffff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; overflow: hidden; }
+
 /* ── TOP BAR ── */
 .topbar {
   height: 50px;
@@ -34,7 +34,15 @@ body {
 .app { display: flex; flex: 1; overflow: hidden; }
 
 /* ── SIDEBAR ── */
-
+.sidebar {
+  width: 285px;
+  min-width: 285px;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 .tabs { display: flex; border-bottom: 1px solid #e5e7eb; flex-shrink: 0; }
 .tab {
   flex: 1;
