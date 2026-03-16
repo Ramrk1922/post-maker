@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peravurani News — Post Maker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&family=Noto+Serif+Tamil:ital,wght@0,400;0,700;1,400&family=Catamaran:wght@400;700;900&family=Hind+Madurai:wght@400;500;700&family=Arima+Madurai:wght@400;700;900&family=Mukta:wght@400;700&family=Meera+Inimai&family=Tiro+Tamil:ital@0;1&family=Baloo+Tammudu+2:wght@400;700&family=Anek+Tamil:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="logo">📰 Post Maker</div>
+    <div class="topbar-right">
+      <span id="canvasInfo">1080 × 1080 px</span>
+      <button class="btn btn-primary" onclick="downloadPost()">⬇ Download PNG</button>
+    </div>
+  </header>
+
+  <div class="app">
+
+    <!-- ══════════ SIDEBAR ══════════ -->
+    <div class="sidebar">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('content')">Content</button>
+        <button class="tab" onclick="switchTab('style')">Style</button>
+        <button class="tab" onclick="switchTab('bg')">Background</button>
+        <button class="tab" onclick="switchTab('position')">Position</button>
+      </div>
+
+      <!-- ── CONTENT TAB ── -->
+      <div class="tab-content active" id="tab-content">
+        <div class="field"><label>Headline (Tamil / English)</label><textarea id="heading">பெரவுராணி செய்திகள்</textarea></div>
+        <div class="field"><label>Sub-text</label><textarea id="subtext">இன்றைய முக்கியமான செய்திகள் இங்கே.</textarea></div>
+        <div class="field"><label>Reporter</label><input type="text" id="reporter" placeholder="நிருபர்: ..."></div>
+        <div class="field"><label>Source / Website</label><input type="text" id="source" value="news.peravurani.in"></div>
+        <div class="field"><label>Date</label><input type="text" id="datetext"></div>
+
+        <div class="divider"></div>
+
+        <div class="sec">Show / Hide</div>
+        <div class="toggle-row"><label>Reporter line</label><div class="toggle on" id="reporterToggle" onclick="toggleOpt('reporterToggle','showReporter')"></div></div>
+        <div class="toggle-row"><label>Date</label><div class="toggle on" id="dateToggle" onclick="toggleOpt('dateToggle','showDate')"></div></div>
+        <div class="toggle-row"><label>Accent bar</label><div class="toggle on" id="barToggle" onclick="toggleOpt('barToggle','showBar')"></div></div>
+        <div class="toggle-row"><label>Footer promo</label><div class="toggle on" id="footerToggle" onclick="toggleOpt('footerToggle','showFooter')"></div></div>
+        <div class="toggle-row"><label>Watermark</label><div class="toggle on" id="wmToggle" onclick="toggleOpt('wmToggle','showWm')"></div></div>
+
+        <div class="divider"></div>
+
+        <div class="sec">Post Size</div>
+        <div class="size-label">Square</div>
+        <div class="size-grid">
+          <div class="size-card active" onclick="pickSize(this,1080,1080)"><div class="sv" style="width:20px;height:20px"></div><div class="sl">1:1</div><div class="ss">1080×1080</div></div>
+        </div>
+        <div class="size-label">Portrait</div>
+        <div class="size-grid">
+          <div class="size-card" onclick="pickSize(this,1080,1350)"><div class="sv" style="width:17px;height:21px"></div><div class="sl">4:5</div><div class="ss">1080×1350</div></div>
+          <div class="size-card" onclick="pickSize(this,1080,1440)"><div class="sv" style="width:16px;height:21px"></div><div class="sl">3:4</div><div class="ss">1080×1440</div></div>
+          <div class="size-card" onclick="pickSize(this,1080,1920)"><div class="sv" style="width:12px;height:21px"></div><div class="sl">9:16</div><div class="ss">1080×1920</div></div>
+          <div class="size-card" onclick="pickSize(this,1080,1620)"><div class="sv" style="width:14px;height:21px"></div><div class="sl">2:3</div><div class="ss">1080×1620</div></div>
+        </div>
+        <div class="size-label">Landscape</div>
+        <div class="size-grid">
+          <div class="size-card" onclick="pickSize(this,1920,1080)"><div class="sv" style="width:22px;height:13px"></div><div class="sl">16:9</div><div class="ss">1920×1080</div></div>
+          <div class="size-card" onclick="pickSize(this,1200,630)"><div class="sv" style="width:22px;height:12px"></div><div class="sl">~2:1</div><div class="ss">1200×630</div></div>
+          <div class="size-card" onclick="pickSize(this,1440,1080)"><div class="sv" style="width:20px;height:15px"></div><div class="sl">4:3</div><div class="ss">1440×1080</div></div>
+          <div class="size-card" onclick="pickSize(this,1500,500)"><div class="sv" style="width:24px;height:8px"></div><div class="sl">3:1</div><div class="ss">1500×500</div></div>
+        </div>
+        <div class="size-label">Custom</div>
+        <div class="custom-row">
+          <input type="text" id="customW" value="1080" placeholder="W">
+          <span>×</span>
+          <input type="text" id="customH" value="1080" placeholder="H">
+          <button class="btn" onclick="applyCustomSize()">Apply</button>
+        </div>
+      </div>
+
+      <!-- ── STYLE TAB ── -->
+      <div class="tab-content" id="tab-style">
+
+        <!-- Headline -->
+        <div class="cs-head" onclick="toggleSection('s-headline')"><span class="cs-title">Headline</span><span class="cs-arrow open" id="arr-s-headline">▼</span></div>
+        <div class="cs-body open" id="s-headline">
+          <div class="field">
+            <label>Font</label>
+            <select id="fontSelect" onchange="onFontChange()">
+              <optgroup label="── Tamil Fonts ──">
+                <option value="'Noto Sans Tamil',sans-serif" data-p="பெரவுராணி செய்தி" selected>Noto Sans Tamil — Modern</option>
+                <option value="'Noto Serif Tamil',serif" data-p="பெரவுராணி செய்தி">Noto Serif Tamil — Classic Serif</option>
+                <option value="'Catamaran',sans-serif" data-p="பெரவுராணி செய்தி">Catamaran — Bold / Bamini-like</option>
+                <option value="'Hind Madurai',sans-serif" data-p="பெரவுராணி செய்தி">Hind Madurai — Traditional Print</option>
+                <option value="'Arima Madurai',serif" data-p="பெரவுராணி செய்தி">Arima Madurai — Elegant Rounded</option>
+                <option value="'Mukta',sans-serif" data-p="பெரவுராணி செய்தி">Mukta — Versatile Clean</option>
+                <option value="'Meera Inimai',sans-serif" data-p="பெரவுராணி செய்தி">Meera Inimai — Thin Light</option>
+                <option value="'Tiro Tamil',serif" data-p="பெரவுராணி செய்தி">Tiro Tamil — Formal Serif</option>
+                <option value="'Baloo Tammudu 2',cursive" data-p="பெரவுராணி செய்தி">Baloo Tammudu 2 — Rounded Fun</option>
+                <option value="'Anek Tamil',sans-serif" data-p="பெரவுராணி செய்தி">Anek Tamil — Contemporary</option>
+              </optgroup>
+              <optgroup label="── English Fonts ──">
+                <option value="Georgia,serif" data-p="Peravurani News">Georgia — Classic Serif</option>
+                <option value="Impact,sans-serif" data-p="BREAKING NEWS">Impact — Heavy Bold</option>
+                <option value="'Times New Roman',serif" data-p="Peravurani News">Times New Roman</option>
+                <option value="Arial,sans-serif" data-p="Peravurani News">Arial — Clean Sans</option>
+                <option value="'Trebuchet MS',sans-serif" data-p="Peravurani News">Trebuchet MS</option>
+                <option value="Verdana,sans-serif" data-p="Peravurani News">Verdana — Wide Clear</option>
+              </optgroup>
+            </select>
+            <div class="font-preview" id="fontPreview" style="font-family:'Noto Sans Tamil',sans-serif">பெரவுராணி செய்தி</div>
+          </div>
+          <div class="field"><label>Size</label><div class="range-row"><input type="range" min="14" max="80" value="36" id="headSize" oninput="sync('headSize','headSizeV')"><span class="rv" id="headSizeV">36</span></div></div>
+          <div class="field" id="cp-head"></div>
+          <div class="field"><label>Alignment</label>
+            <div class="align-row">
+              <div class="align-btn active" id="al-left" onclick="setAlign('left')">&#8676;</div>
+              <div class="align-btn" id="al-center" onclick="setAlign('center')">&#8596;</div>
+              <div class="align-btn" id="al-right" onclick="setAlign('right')">&#8677;</div>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="toggle-row"><label>Bold</label><div class="toggle on" id="boldToggle" onclick="toggleOpt('boldToggle','boldHead')"></div></div>
+            <div class="toggle-row"><label>Italic</label><div class="toggle" id="italicToggle" onclick="toggleOpt('italicToggle','italicHead')"></div></div>
+          </div>
+          <div class="toggle-row"><label>Text shadow</label><div class="toggle on" id="shadowToggle" onclick="toggleOpt('shadowToggle','showShadow')"></div></div>
+          <div class="field"><label>Opacity</label><div class="range-row"><input type="range" min="30" max="100" value="95" id="textOpacity" oninput="sync('textOpacity','textOpacityV')"><span class="rv" id="textOpacityV">95</span></div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Sub-text -->
+        <div class="cs-head" onclick="toggleSection('s-subtext')"><span class="cs-title">Sub-text</span><span class="cs-arrow open" id="arr-s-subtext">▼</span></div>
+        <div class="cs-body open" id="s-subtext">
+          <div class="field"><label>Size</label><div class="range-row"><input type="range" min="10" max="36" value="16" id="subSize" oninput="sync('subSize','subSizeV')"><span class="rv" id="subSizeV">16</span></div></div>
+          <div class="field" id="cp-sub"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Spacing -->
+        <div class="cs-head" onclick="toggleSection('s-spacing')"><span class="cs-title">Spacing</span><span class="cs-arrow" id="arr-s-spacing">▼</span></div>
+        <div class="cs-body" id="s-spacing">
+          <div class="field"><label>Line height</label><div class="range-row"><input type="range" min="100" max="200" value="130" id="lineHeight" oninput="sync('lineHeight','lineHeightV')"><span class="rv" id="lineHeightV">130</span></div></div>
+          <div class="field"><label>Text width %</label><div class="range-row"><input type="range" min="30" max="100" value="82" id="textWidth" oninput="sync('textWidth','textWidthV')"><span class="rv" id="textWidthV">82</span></div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Accent -->
+        <div class="cs-head" onclick="toggleSection('s-accent')"><span class="cs-title">Accent &amp; Info Bar</span><span class="cs-arrow" id="arr-s-accent">▼</span></div>
+        <div class="cs-body" id="s-accent">
+          <div class="field" id="cp-accent"></div>
+          <div class="field"><label>Info font size</label><div class="range-row"><input type="range" min="8" max="26" value="13" id="infoSize" oninput="sync('infoSize','infoSizeV')"><span class="rv" id="infoSizeV">13</span></div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Watermark style -->
+        <div class="cs-head" onclick="toggleSection('s-wm')"><span class="cs-title">Watermark Style</span><span class="cs-arrow" id="arr-s-wm">▼</span></div>
+        <div class="cs-body" id="s-wm">
+          <div class="field"><label>Text</label><input type="text" id="wmText" value="@peravurani"></div>
+          <div class="field"><label>Size</label><div class="range-row"><input type="range" min="8" max="40" value="11" id="wmSize" oninput="sync('wmSize','wmSizeV')"><span class="rv" id="wmSizeV">11</span></div></div>
+          <div class="field"><label>Opacity</label><div class="range-row"><input type="range" min="5" max="100" value="35" id="wmOpacity" oninput="sync('wmOpacity','wmOpacityV')"><span class="rv" id="wmOpacityV">35</span></div></div>
+          <div class="field" id="cp-wm"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Logo -->
+        <div class="cs-head" onclick="toggleSection('s-logo')"><span class="cs-title">Logo</span><span class="cs-arrow" id="arr-s-logo">▼</span></div>
+        <div class="cs-body" id="s-logo">
+          <div class="upload-btn" onclick="document.getElementById('logoUpload').click()">+ Upload logo</div>
+          <input type="file" id="logoUpload" accept="image/*" style="display:none">
+          <div class="field"><label>Logo size</label><div class="range-row"><input type="range" min="20" max="140" value="60" id="logoSize" oninput="sync('logoSize','logoSizeV')"><span class="rv" id="logoSizeV">60</span></div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Footer promo -->
+        <div class="cs-head" onclick="toggleSection('s-footer')"><span class="cs-title">Footer Promo</span><span class="cs-arrow" id="arr-s-footer">▼</span></div>
+        <div class="cs-body" id="s-footer">
+          <div class="upload-btn" onclick="document.getElementById('footerUpload').click()">+ Upload promo image</div>
+          <input type="file" id="footerUpload" accept="image/*" style="display:none">
+          <div class="field"><label>Footer height</label><div class="range-row"><input type="range" min="40" max="220" value="90" id="footerH" oninput="sync('footerH','footerHV')"><span class="rv" id="footerHV">90</span></div></div>
+        </div>
+      </div>
+
+      <!-- ── BACKGROUND TAB ── -->
+      <div class="tab-content" id="tab-bg">
+        <div class="sec">Background Type</div>
+        <div class="bg-mode-row">
+          <button class="bg-mode-btn active" id="bm-solid" onclick="setBgMode('solid',this)">Solid</button>
+          <button class="bg-mode-btn" id="bm-gradient" onclick="setBgMode('gradient',this)">Gradient</button>
+          <button class="bg-mode-btn" id="bm-photo" onclick="setBgMode('photo',this)">Photo</button>
+        </div>
+
+        <div class="bg-section active" id="bgs-solid">
+          <div id="cp-bg"></div>
+        </div>
+
+        <div class="bg-section" id="bgs-gradient">
+          <div class="sec">Preset Gradients</div>
+          <div class="grad-grid" id="gradPresets"></div>
+          <div class="divider" style="margin:8px 0"></div>
+          <div class="sec">Custom Gradient</div>
+          <div class="row2" style="margin-top:6px">
+            <div><div class="size-label">Color 1</div><div id="cp-grad1"></div></div>
+            <div><div class="size-label">Color 2</div><div id="cp-grad2"></div></div>
+          </div>
+          <div class="field" style="margin-top:8px"><label>Direction</label>
+            <select id="gradDir">
+              <option value="tb">Top → Bottom</option>
+              <option value="lr">Left → Right</option>
+              <option value="tl">Diagonal ↘</option>
+              <option value="tr">Diagonal ↙</option>
+              <option value="radial">Radial Center</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-section" id="bgs-photo">
+          <div class="upload-btn" onclick="document.getElementById('bgUpload').click()">+ Upload background photo</div>
+          <input type="file" id="bgUpload" accept="image/*" style="display:none">
+          <div class="field"><label>Dim</label><div class="range-row"><input type="range" min="0" max="90" value="52" id="bgDim" oninput="sync('bgDim','bgDimV')"><span class="rv" id="bgDimV">52</span></div></div>
+          <div class="field"><label>Brightness</label><div class="range-row"><input type="range" min="30" max="150" value="100" id="bgBright" oninput="sync('bgBright','bgBrightV')"><span class="rv" id="bgBrightV">100</span></div></div>
+          <div class="field"><label>Blur</label><div class="range-row"><input type="range" min="0" max="20" value="0" id="bgBlur" oninput="sync('bgBlur','bgBlurV')"><span class="rv" id="bgBlurV">0</span></div></div>
+          <div class="field"><label>Overlay</label>
+            <select id="gradientStyle">
+              <option value="bottom">Bottom dark</option>
+              <option value="top">Top dark</option>
+              <option value="none">None</option>
+              <option value="full">Full dark</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── POSITION TAB ── -->
+      <div class="tab-content" id="tab-position">
+        <div class="hint">Drag text on canvas — or use sliders below</div>
+
+        <div class="cs-head" onclick="toggleSection('p-headline')"><span class="cs-title">Headline</span><span class="cs-arrow open" id="arr-p-headline">▼</span></div>
+        <div class="cs-body open" id="p-headline">
+          <div class="row2">
+            <div><label>X</label><div class="range-row"><input type="range" min="-400" max="400" value="0" id="headX" oninput="syncNum('headX','headXV')"><span class="rv" id="headXV">0</span></div></div>
+            <div><label>Y</label><div class="range-row"><input type="range" min="-400" max="400" value="0" id="headY" oninput="syncNum('headY','headYV')"><span class="rv" id="headYV">0</span></div></div>
+          </div>
+          <button class="btn full" onclick="resetPos('head')">Reset</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="cs-head" onclick="toggleSection('p-subtext')"><span class="cs-title">Sub-text</span><span class="cs-arrow open" id="arr-p-subtext">▼</span></div>
+        <div class="cs-body open" id="p-subtext">
+          <div class="row2">
+            <div><label>X</label><div class="range-row"><input type="range" min="-400" max="400" value="0" id="subX" oninput="syncNum('subX','subXV')"><span class="rv" id="subXV">0</span></div></div>
+            <div><label>Y</label><div class="range-row"><input type="range" min="-300" max="300" value="0" id="subY" oninput="syncNum('subY','subYV')"><span class="rv" id="subYV">0</span></div></div>
+          </div>
+          <button class="btn full" onclick="resetPos('sub')">Reset</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="cs-head" onclick="toggleSection('p-info')"><span class="cs-title">Info Bar</span><span class="cs-arrow" id="arr-p-info">▼</span></div>
+        <div class="cs-body" id="p-info">
+          <div class="row2">
+            <div><label>X</label><div class="range-row"><input type="range" min="-400" max="400" value="0" id="infoX" oninput="syncNum('infoX','infoXV')"><span class="rv" id="infoXV">0</span></div></div>
+            <div><label>Y</label><div class="range-row"><input type="range" min="-200" max="200" value="0" id="infoY" oninput="syncNum('infoY','infoYV')"><span class="rv" id="infoYV">0</span></div></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="cs-head" onclick="toggleSection('p-wm')"><span class="cs-title">Watermark</span><span class="cs-arrow" id="arr-p-wm">▼</span></div>
+        <div class="cs-body" id="p-wm">
+          <div class="field"><label>Quick snap</label>
+            <div class="preset-row">
+              <button class="preset-btn" onclick="setWmPreset('top-left')">Top L</button>
+              <button class="preset-btn" onclick="setWmPreset('top-center')">Top C</button>
+              <button class="preset-btn" onclick="setWmPreset('top-right')">Top R</button>
+              <button class="preset-btn" onclick="setWmPreset('center')">Center</button>
+              <button class="preset-btn" onclick="setWmPreset('bottom-left')">Bot L</button>
+              <button class="preset-btn" onclick="setWmPreset('bottom-center')">Bot C</button>
+              <button class="preset-btn" onclick="setWmPreset('bottom-right')">Bot R</button>
+            </div>
+          </div>
+          <div class="field"><label>X %</label><div class="range-row"><input type="range" min="0" max="100" value="98" id="wmX" oninput="sync('wmX','wmXV')"><span class="rv" id="wmXV">98</span></div></div>
+          <div class="field"><label>Y %</label><div class="range-row"><input type="range" min="0" max="100" value="2" id="wmY" oninput="sync('wmY','wmYV')"><span class="rv" id="wmYV">2</span></div></div>
+          <div class="field"><label>Rotation °</label><div class="range-row"><input type="range" min="-180" max="180" value="0" id="wmRot" oninput="sync('wmRot','wmRotV')"><span class="rv" id="wmRotV">0</span></div></div>
+          <button class="btn full" onclick="resetWm()">Reset watermark</button>
+        </div>
+
+        <div class="divider"></div>
+        <button class="btn full" onclick="resetAllPos()">Reset all positions</button>
+      </div>
+    </div>
+
+    <!-- ══════════ CANVAS ══════════ -->
+    <div class="canvas-area">
+      <canvas id="postCanvas" width="540" height="540"></canvas>
+      <p class="hint">Drag headline, subtext or watermark on canvas to reposition</p>
+      <div class="btn-row">
+        <button class="btn" onclick="drawPost()">Refresh</button>
+        <button class="btn btn-primary" onclick="downloadPost()">⬇ Download PNG</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
